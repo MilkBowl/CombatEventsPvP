@@ -11,16 +11,21 @@ import net.milkbowl.combatevents.events.EntityKilledByEntityEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CombatListener extends CombatEventsListener {
-	
+
 	CombatListener() {
 	}
-	
+
 	@Override
 	public void onEntityKilledByEntityEvent(EntityKilledByEntityEvent event) {
 		if (event.getAttacker() instanceof Player && event.getKilled() instanceof Player) {
 			if (Config.isGlobalPvPMessage()) {
-				int rand = new Random().nextInt(Config.getGlobalPvPMessages().size() - 1);
-				String message = Config.getGlobalPvPMessages().get(rand);
+				String message;
+				if (Config.getGlobalPvPMessages().size() > 1) {
+					int rand = new Random().nextInt(Config.getGlobalPvPMessages().size() - 1);
+					message = Config.getGlobalPvPMessages().get(rand);
+				} else
+					message = Config.getGlobalPvPMessages().get(0);
+				
 				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
 					player.sendMessage(ChatColor.YELLOW + formatMessage(message, new String[] {"%ATTACKER%", "%KILLED%"}, new String[] {"", ""}));
 				}
@@ -41,15 +46,15 @@ public class CombatListener extends CombatEventsListener {
 			//Send our messages
 			attacker.sendMessage(formatMessage(Config.getKillerMessage(), new String[] {"%PLAYER%", "%REWARD%"}, new String[] {killed.getName(), CombatEventsPvP.econ.format(reward)}));
 			killed.sendMessage(formatMessage(Config.getDeathMessage(), new String[] {"%PLAYER%", "%REWARD%"}, new String[] {attacker.getName(), CombatEventsPvP.econ.format(reward)}));
-			
+
 		}
 	}
-	
+
 	private String formatMessage(String message, String[] replaceText, String[] replacers) {
 		for (int i = 0; i < replaceText.length; i++) {
 			message.replace(replaceText[i], replacers[i]);
 		}
 		return message;
 	}
-	
+
 }
