@@ -2,6 +2,7 @@ package net.milkbowl.combatevents.pvp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.bukkit.util.config.Configuration;
@@ -14,10 +15,18 @@ public class Config {
 	private static String rewardType = "percent";
 	private static double reward = 5;
 	
-	private static String killerMessage = "You have stolen %REWARD% for killing %KILLED%";
+	private static String killerMessage = "You have stolen %REWARD% for killing %PLAYER%";
+	private static String deathMessage = "You have lost %REWARD% for dying to %PLAYER%";
+	private static boolean isGlobalPvPMessage = true;
 
-	private static String deathMessage = "You have lost %REWARD% for dying to %KILLER%";
-	
+	private static List<String> globalPvPMessages; 
+	static { 
+		globalPvPMessages.add("%ATTACKER% has slaughtered %KILLED%!");
+		globalPvPMessages.add("%KILLED% found death in %ATTACKER%'s presence!");
+		globalPvPMessages.add("%KILLED% couldn't escape %ATTACKER%'s onslaught!");
+		globalPvPMessages.add("%ATTACKER% sent %KILLED% to their creator.");
+		globalPvPMessages.add("%ATTACKER% proved their worth against %KILLED%");
+	}
 	
 	public static void initialize(CombatEventsPvP plugin) {
 		//Check to see if there is a configuration file.
@@ -38,9 +47,12 @@ public class Config {
 		if (config.getKeys(null).isEmpty()) {
 			config.setProperty("reward-type", rewardType);
 			config.setProperty("reward", reward);
-			config.setProperty("killer-message", killerMessage);
-			config.setProperty("death-message", deathMessage);
+			config.setProperty("messages.killer", killerMessage);
+			config.setProperty("messages.death", deathMessage);
+			config.setProperty("messages.global-messages", isGlobalPvPMessage);
+			config.setProperty("messages.globalpvp", globalPvPMessages);
 		}
+		
 		//Load our options now
 		rewardType = config.getString("reward-type").toLowerCase();
 		verifyRewardType();
@@ -48,6 +60,8 @@ public class Config {
 		verifyReward();
 		killerMessage = config.getString("killer-message", killerMessage);
 		deathMessage = config.getString("death-message", deathMessage);
+		isGlobalPvPMessage = Boolean.getBoolean(config.getString("messages.global-messages", Boolean.toString(isGlobalPvPMessage)));
+		globalPvPMessages = config.getStringList("messages.globalpvp", globalPvPMessages);
 		config.save();		
 	}
 	
@@ -87,5 +101,13 @@ public class Config {
 
 	public static String getDeathMessage() {
 		return deathMessage;
+	}
+	
+	public static boolean isGlobalPvPMessage() {
+		return isGlobalPvPMessage;
+	}
+
+	public static List<String> getGlobalPvPMessages() {
+		return globalPvPMessages;
 	}
 }

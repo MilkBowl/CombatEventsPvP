@@ -61,8 +61,8 @@ public class CombatEventsPvP extends JavaPlugin {
 		if (CombatEventsPvP.econ == null || CombatEventsPvP.perms == null) {
 			Plugin VAULT = this.getServer().getPluginManager().getPlugin("Vault");
 			if (VAULT != null) {
-				CombatEventsPvP.econ = ((Vault) VAULT).getEconomy();
-				CombatEventsPvP.perms = ((Vault) VAULT).getPermission();
+				CombatEventsPvP.econ = Vault.getEconomy();
+				CombatEventsPvP.perms = Vault.getPermission();
 			}
 		}
 		if (CombatEventsPvP.perms == null || CombatEventsPvP.econ == null || ceCore == null)
