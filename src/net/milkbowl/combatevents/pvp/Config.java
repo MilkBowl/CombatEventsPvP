@@ -2,6 +2,7 @@ package net.milkbowl.combatevents.pvp;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -18,8 +19,10 @@ public class Config {
 	private static String killerMessage = "You have stolen %REWARD% for killing %PLAYER%";
 	private static String deathMessage = "You have lost %REWARD% for dying to %PLAYER%";
 	private static boolean isGlobalPvPMessage = true;
+	private static boolean jailPunish = true;
+	private static int graceTime = 120;
 
-	private static List<String> globalPvPMessages; 
+	private static List<String> globalPvPMessages = new ArrayList<String>(6); 
 	static { 
 		globalPvPMessages.add("%ATTACKER% has slaughtered %KILLED%!");
 		globalPvPMessages.add("%KILLED% found death in %ATTACKER%'s presence!");
@@ -47,6 +50,8 @@ public class Config {
 		if (config.getKeys(null).isEmpty()) {
 			config.setProperty("reward-type", rewardType);
 			config.setProperty("reward", reward);
+			config.setProperty("punish.jail", jailPunish);
+			config.setProperty("punish.grace-time", graceTime);
 			config.setProperty("messages.killer", killerMessage);
 			config.setProperty("messages.death", deathMessage);
 			config.setProperty("messages.global-messages", isGlobalPvPMessage);
@@ -60,7 +65,9 @@ public class Config {
 		verifyReward();
 		killerMessage = config.getString("killer-message", killerMessage);
 		deathMessage = config.getString("death-message", deathMessage);
-		isGlobalPvPMessage = Boolean.getBoolean(config.getString("messages.global-messages", Boolean.toString(isGlobalPvPMessage)));
+		jailPunish = config.getBoolean("punish.jail", jailPunish);
+		graceTime = config.getInt("punish.grace-time", graceTime);
+		isGlobalPvPMessage = config.getBoolean("messages.global-messages", isGlobalPvPMessage);
 		globalPvPMessages = config.getStringList("messages.globalpvp", globalPvPMessages);
 		config.save();		
 	}
@@ -109,5 +116,13 @@ public class Config {
 
 	public static List<String> getGlobalPvPMessages() {
 		return globalPvPMessages;
+	}
+
+	public static boolean isJailPunish() {
+		return jailPunish;
+	}
+
+	public static int getGraceTime() {
+		return graceTime;
 	}
 }

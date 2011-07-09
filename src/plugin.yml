@@ -2,5 +2,6 @@ name: CombatEventsPvP
 main: net.milkbowl.combatevents.pvp.CombatEventsPvP
 version: 1.0
 author: Sleaker
+depend: [Vault, CombatEventsCore]
 description: >
              A plugin that handles PvP rewards and other PvP related results

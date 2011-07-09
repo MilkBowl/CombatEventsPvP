@@ -12,13 +12,10 @@ import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.config.Configuration;
 
 public class CombatEventsPvP extends JavaPlugin {
 	public static String plugName;
 	public static Logger log = Logger.getLogger("Minecraft");
-	
-	public static Configuration config;
 
 	//Dependencies
 	private CombatEventsCore ceCore = null;
@@ -55,7 +52,6 @@ public class CombatEventsPvP extends JavaPlugin {
 			Plugin ceCore = this.getServer().getPluginManager().getPlugin("CombatEventsCore");
 			if (ceCore != null) {
 				this.ceCore = ((CombatEventsCore) ceCore);
-				log.info(plugName + " - Successfully hooked " + ceCore.getDescription().getName() + "v" + ceCore.getDescription().getVersion());
 			}
 		} 
 		if (CombatEventsPvP.econ == null || CombatEventsPvP.perms == null) {

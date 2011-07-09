@@ -18,17 +18,20 @@ public class CombatListener extends CombatEventsListener {
 	@Override
 	public void onEntityKilledByEntityEvent(EntityKilledByEntityEvent event) {
 		if (event.getAttacker() instanceof Player && event.getKilled() instanceof Player) {
+			//If we have global PvP messages active - lets send a random one
 			if (Config.isGlobalPvPMessage()) {
-				String message;
+				String message = null;
+				//Check if there is more than 1 message in the list
 				if (Config.getGlobalPvPMessages().size() > 1) {
 					int rand = new Random().nextInt(Config.getGlobalPvPMessages().size() - 1);
 					message = Config.getGlobalPvPMessages().get(rand);
-				} else
+				} else if (Config.getGlobalPvPMessages().size() == 1)
 					message = Config.getGlobalPvPMessages().get(0);
-				
-				for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-					player.sendMessage(ChatColor.YELLOW + formatMessage(message, new String[] {"%ATTACKER%", "%KILLED%"}, new String[] {"", ""}));
-				}
+
+				if (message != null)
+					for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+						player.sendMessage(ChatColor.YELLOW + formatMessage(message, new String[] {"%ATTACKER%", "%KILLED%"}, new String[] {"", ""}));
+					}
 			}
 			Player attacker = (Player) event.getAttacker();
 			Player killed = (Player) event.getKilled();
