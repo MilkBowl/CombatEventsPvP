@@ -19,7 +19,10 @@ public class Config {
 	private static String killerMessage = "You have stolen %REWARD% for killing %PLAYER%";
 	private static String deathMessage = "You have lost %REWARD% for dying to %PLAYER%";
 	private static boolean isGlobalPvPMessage = true;
+	private static boolean punish = true;
 	private static boolean jailPunish = true;
+	private static int jailTime = 10;
+	private static int maxLogouts = 2;
 	private static int graceTime = 120;
 
 	private static List<String> globalPvPMessages = new ArrayList<String>(6); 
@@ -50,7 +53,10 @@ public class Config {
 		if (config.getKeys(null).isEmpty()) {
 			config.setProperty("reward-type", rewardType);
 			config.setProperty("reward", reward);
+			config.setProperty("punish.enabled", punish);
+			config.setProperty("punish.max-logouts", maxLogouts);
 			config.setProperty("punish.jail", jailPunish);
+			config.setProperty("punish.jail-time", jailTime);
 			config.setProperty("punish.grace-time", graceTime);
 			config.setProperty("messages.killer", killerMessage);
 			config.setProperty("messages.death", deathMessage);
@@ -65,7 +71,10 @@ public class Config {
 		verifyReward();
 		killerMessage = config.getString("killer-message", killerMessage);
 		deathMessage = config.getString("death-message", deathMessage);
+		punish = config.getBoolean("punish.enabled", punish);
+		maxLogouts = config.getInt("punish.max-logouts", maxLogouts);
 		jailPunish = config.getBoolean("punish.jail", jailPunish);
+		jailTime = config.getInt("punish.jail-time", jailTime);
 		graceTime = config.getInt("punish.grace-time", graceTime);
 		isGlobalPvPMessage = config.getBoolean("messages.global-messages", isGlobalPvPMessage);
 		globalPvPMessages = config.getStringList("messages.globalpvp", globalPvPMessages);

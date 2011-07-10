@@ -6,8 +6,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import net.milkbowl.combatevents.CombatEventsListener;
+import net.milkbowl.combatevents.listeners.CombatEventsListener;
 import net.milkbowl.combatevents.events.EntityKilledByEntityEvent;
+import net.milkbowl.combatevents.events.PlayerLeaveCombatEvent;
 import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CombatListener extends CombatEventsListener {
@@ -15,9 +16,14 @@ public class CombatListener extends CombatEventsListener {
 	CombatListener() {
 	}
 
+	public void onPlayerLeaveCombat(PlayerLeaveCombatEvent event) {
+		
+	}
 	@Override
-	public void onEntityKilledByEntityEvent(EntityKilledByEntityEvent event) {
+	public void onEntityKilledByEntity(EntityKilledByEntityEvent event) {
 		if (event.getAttacker() instanceof Player && event.getKilled() instanceof Player) {
+			Player attacker = (Player) event.getAttacker();
+			Player killed = (Player) event.getKilled();
 			//If we have global PvP messages active - lets send a random one
 			if (Config.isGlobalPvPMessage()) {
 				String message = null;
@@ -30,11 +36,9 @@ public class CombatListener extends CombatEventsListener {
 
 				if (message != null)
 					for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-						player.sendMessage(ChatColor.YELLOW + formatMessage(message, new String[] {"%ATTACKER%", "%KILLED%"}, new String[] {"", ""}));
+						player.sendMessage(ChatColor.YELLOW + formatMessage(message, new String[] {"%ATTACKER%", "%KILLED%"}, new String[] {attacker.getName(), killed.getName()}));
 					}
 			}
-			Player attacker = (Player) event.getAttacker();
-			Player killed = (Player) event.getKilled();
 			EconomyResponse killedBalance = CombatEventsPvP.econ.getBalance(killed.getName());
 			double reward = Config.getReward();
 			if (Config.getRewardType().equals("flat")) {
