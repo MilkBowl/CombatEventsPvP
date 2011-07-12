@@ -80,7 +80,9 @@ public class Config {
 	}
 
 	public static void saveConfig(CombatEventsPvP plugin) {
-		config.setProperty("punish.players", (String[]) plugin.punishSet.toArray());
+		if (!plugin.punishSet.isEmpty())
+			config.setProperty("punish.players", (String[]) plugin.punishSet.toArray());
+		
 		config.save();
 	}
 
