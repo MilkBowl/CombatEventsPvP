@@ -4,8 +4,13 @@ import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
+import net.milkbowl.combatevents.CombatEventsCore;
+import net.milkbowl.combatevents.CombatEventsCore.CombatReason;
+import net.milkbowl.combatevents.CombatEventsCore.LeaveCombatReason;
 import net.milkbowl.combatevents.listeners.CombatEventsListener;
 import net.milkbowl.combatevents.events.EntityKilledByEntityEvent;
 import net.milkbowl.combatevents.events.PlayerLeaveCombatEvent;
@@ -13,12 +18,29 @@ import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CombatListener extends CombatEventsListener {
 
-	CombatListener() {
+	private CombatEventsCore ceCore;
+	CombatListener(CombatEventsCore ceCore) {
+		this.ceCore = ceCore;
 	}
 
 	public void onPlayerLeaveCombat(PlayerLeaveCombatEvent event) {
-		
+
+		if ( (event.getReason().equals(LeaveCombatReason.QUIT) || event.getReason().equals(LeaveCombatReason.KICK)) && Config.isPunish()) {
+			for (CombatReason reason : event.getCombatReasons())
+				if (reason.equals(CombatReason.DAMAGED_BY_PLAYER) || reason.equals(CombatReason.ATTACKED_PLAYER)) {
+					Location dropLoc = ceCore.getCombatPlayer(event.getPlayer()).getLastLocation();
+					ItemStack[] drops = ceCore.getCombatPlayer(event.getPlayer()).getInventory();
+					
+					for (int i = 0; i < drops.length; i++)
+						dropLoc.getWorld().dropItemNaturally(dropLoc, drops[i]);
+
+					event.getPlayer().damage(1000);
+					event.getPlayer().getInventory().clear();
+				}
+		}
+
 	}
+	
 	@Override
 	public void onEntityKilledByEntity(EntityKilledByEntityEvent event) {
 		if (event.getAttacker() instanceof Player && event.getKilled() instanceof Player) {

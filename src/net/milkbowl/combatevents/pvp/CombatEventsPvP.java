@@ -1,5 +1,6 @@
 package net.milkbowl.combatevents.pvp;
 
+import java.util.Set;
 import java.util.logging.Logger;
 
 import net.milkbowl.combatevents.CombatEventsCore;
@@ -21,32 +22,38 @@ public class CombatEventsPvP extends JavaPlugin {
 	private CombatEventsCore ceCore = null;
 	public static Permission perms = null;
 	public static Economy econ = null;
-	
+
 	@Override
 	public void onLoad() {
-		plugName = "["+this.getDescription().getName()+"]";
-		//If we can't load dependencies, disable
-		if (!setupDependencies())
-			this.getServer().getPluginManager().disablePlugin(this);
-	}
-	
-	@Override
-	public void onDisable() {
-		log.info(plugName + " - " +"disabled!");
-		
+		plugName = "[" + this.getDescription().getName() + "]";
 	}
 
 	@Override
+	public void onDisable() {
+		log.info(plugName + " - " + "disabled!");
+	}
+
+	protected Set<String> punishSet;
+	
+	@Override
 	public void onEnable() {
+		//If we can't load dependencies, disable
+		if (!setupDependencies()) {
+			this.getServer().getPluginManager().disablePlugin(this);
+			return;
+		}
+
+		//Initialize our configuration options
 		Config.initialize(this);
-		
+
+		//Register our events & listeners
 		PluginManager pm = this.getServer().getPluginManager();
-		CombatListener combatListener = new CombatListener();
+		CombatListener combatListener = new CombatListener(ceCore);
 		pm.registerEvent(Event.Type.CUSTOM_EVENT, combatListener, Priority.High, this);
-		
+
 		log.info(plugName + " - v" + this.getDescription().getVersion() + " enabled!");
 	}
-	
+
 	private boolean setupDependencies() {
 		if (ceCore == null) {
 			Plugin ceCore = this.getServer().getPluginManager().getPlugin("CombatEventsCore");
