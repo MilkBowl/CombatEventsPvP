@@ -39,6 +39,7 @@ public class CombatListener extends CombatEventsListener {
 					event.getPlayer().damage(1000);
 					event.getPlayer().getInventory().clear();
 					plugin.punishSet.add(event.getPlayer().getName());
+					Config.saveConfig(plugin);
 				}
 		}
 	}

@@ -66,14 +66,19 @@ public class Config {
 		punish = config.getBoolean("punish.enabled", punish);
 		isGlobalPvPMessage = config.getBoolean("messages.global-messages", isGlobalPvPMessage);
 		globalPvPMessages = config.getStringList("messages.globalpvp", globalPvPMessages);
+		plugin.punishSet.addAll(config.getStringList("punish.players", null));
 		config.save();		
-		
 		
 	}
 	
 	private static void verifyRewardType() {
 		if (!rewardType.equals("percent") || !rewardType.equals("flat"))
 			rewardType.equals("percent");
+	}
+	
+	public static void saveConfig(CombatEventsPvP plugin) {
+		config.setProperty("punish.players", (String[]) plugin.punishSet.toArray());
+		config.save();
 	}
 	
 	/**

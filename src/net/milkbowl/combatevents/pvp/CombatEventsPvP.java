@@ -31,6 +31,7 @@ public class CombatEventsPvP extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		log.info(plugName + " - " + "disabled!");
+		Config.saveConfig(this);
 	}
 
 	protected Set<String> punishSet;
