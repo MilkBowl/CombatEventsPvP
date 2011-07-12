@@ -1,5 +1,6 @@
 package net.milkbowl.combatevents.pvp;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
@@ -43,7 +44,7 @@ public class CombatEventsPvP extends JavaPlugin {
 			this.getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
-
+		punishSet = new HashSet<String>();
 		//Initialize our configuration options
 		Config.initialize(this);
 

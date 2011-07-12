@@ -67,8 +67,8 @@ public class Config {
 		isGlobalPvPMessage = config.getBoolean("messages.global-messages", isGlobalPvPMessage);
 		globalPvPMessages = config.getStringList("messages.globalpvp", globalPvPMessages);
 		List<String> players = config.getStringList("punish.players", new ArrayList<String>());
-		if (players != null && !players.isEmpty())
-			plugin.punishSet.addAll(players);
+
+		plugin.punishSet.addAll(players);
 
 		config.save();		
 
@@ -80,9 +80,8 @@ public class Config {
 	}
 
 	public static void saveConfig(CombatEventsPvP plugin) {
-		if (!plugin.punishSet.isEmpty())
-			config.setProperty("punish.players", (String[]) plugin.punishSet.toArray());
-		
+		config.setProperty("punish.players", plugin.punishSet.toArray());
+
 		config.save();
 	}
 
