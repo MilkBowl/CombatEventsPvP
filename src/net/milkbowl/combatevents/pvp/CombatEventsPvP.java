@@ -48,9 +48,10 @@ public class CombatEventsPvP extends JavaPlugin {
 
 		//Register our events & listeners
 		PluginManager pm = this.getServer().getPluginManager();
-		CombatListener combatListener = new CombatListener(ceCore);
+		CombatListener combatListener = new CombatListener(ceCore, this);
+		PvPPlayerListener playerListener = new PvPPlayerListener(this);
 		pm.registerEvent(Event.Type.CUSTOM_EVENT, combatListener, Priority.High, this);
-
+		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.Monitor, this);
 		log.info(plugName + " - v" + this.getDescription().getVersion() + " enabled!");
 	}
 

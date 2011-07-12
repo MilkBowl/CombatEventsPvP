@@ -19,8 +19,10 @@ import net.milkbowl.vault.economy.EconomyResponse;
 public class CombatListener extends CombatEventsListener {
 
 	private CombatEventsCore ceCore;
-	CombatListener(CombatEventsCore ceCore) {
+	private CombatEventsPvP plugin;
+	CombatListener(CombatEventsCore ceCore, CombatEventsPvP plugin) {
 		this.ceCore = ceCore;
+		this.plugin = plugin;
 	}
 
 	public void onPlayerLeaveCombat(PlayerLeaveCombatEvent event) {
@@ -36,9 +38,9 @@ public class CombatListener extends CombatEventsListener {
 
 					event.getPlayer().damage(1000);
 					event.getPlayer().getInventory().clear();
+					plugin.punishSet.add(event.getPlayer().getName());
 				}
 		}
-
 	}
 	
 	@Override
