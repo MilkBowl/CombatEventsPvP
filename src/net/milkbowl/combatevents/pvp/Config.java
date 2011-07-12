@@ -11,11 +11,11 @@ import org.bukkit.util.config.Configuration;
 public class Config {
 	private static Logger log = Logger.getLogger("Minecraft");
 	private static Configuration config;
-	
+
 	//Our default configuration values
 	private static String rewardType = "percent";
 	private static double reward = 5;
-	
+
 	private static String killerMessage = "You have stolen %REWARD% for killing %PLAYER%";
 	private static String deathMessage = "You have lost %REWARD% for dying to %PLAYER%";
 	private static boolean isGlobalPvPMessage = true;
@@ -29,7 +29,7 @@ public class Config {
 		globalPvPMessages.add("%ATTACKER% sent %KILLED% to their creator.");
 		globalPvPMessages.add("%ATTACKER% proved their worth against %KILLED%");
 	}
-	
+
 	public static void initialize(CombatEventsPvP plugin) {
 		//Check to see if there is a configuration file.
 		File yml = new File(plugin.getDataFolder()+"/config.yml");
@@ -43,7 +43,7 @@ public class Config {
 				log.info(CombatEventsPvP.plugName + " - Cannot create configuration file. And none to load, using defaults.");
 			}
 		}
-		
+
 		config = plugin.getConfiguration();
 		//If the configuration is empty, lets load our defaults
 		if (config.getKeys(null).isEmpty()) {
@@ -55,7 +55,7 @@ public class Config {
 			config.setProperty("messages.global-messages", isGlobalPvPMessage);
 			config.setProperty("messages.globalpvp", globalPvPMessages);
 		}
-		
+
 		//Load our options now
 		rewardType = config.getString("reward-type").toLowerCase();
 		verifyRewardType();
@@ -66,21 +66,24 @@ public class Config {
 		punish = config.getBoolean("punish.enabled", punish);
 		isGlobalPvPMessage = config.getBoolean("messages.global-messages", isGlobalPvPMessage);
 		globalPvPMessages = config.getStringList("messages.globalpvp", globalPvPMessages);
-		plugin.punishSet.addAll(config.getStringList("punish.players", null));
+		List<String> players = config.getStringList("punish.players", new ArrayList<String>());
+		if (players != null && !players.isEmpty())
+			plugin.punishSet.addAll(players);
+
 		config.save();		
-		
+
 	}
-	
+
 	private static void verifyRewardType() {
 		if (!rewardType.equals("percent") || !rewardType.equals("flat"))
 			rewardType.equals("percent");
 	}
-	
+
 	public static void saveConfig(CombatEventsPvP plugin) {
 		config.setProperty("punish.players", (String[]) plugin.punishSet.toArray());
 		config.save();
 	}
-	
+
 	/**
 	 * Resets the reward value to a valid value
 	 * percent rewards need to be from 0-100
@@ -105,7 +108,7 @@ public class Config {
 	public static double getReward() {
 		return reward;
 	}
-	
+
 	public static String getKillerMessage() {
 		return killerMessage;
 	}
@@ -113,7 +116,7 @@ public class Config {
 	public static String getDeathMessage() {
 		return deathMessage;
 	}
-	
+
 	public static boolean isGlobalPvPMessage() {
 		return isGlobalPvPMessage;
 	}
