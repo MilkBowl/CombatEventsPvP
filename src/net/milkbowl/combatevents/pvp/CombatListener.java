@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.milkbowl.combatevents.CombatEventsCore;
-import net.milkbowl.combatevents.CombatEventsCore.CombatReason;
-import net.milkbowl.combatevents.CombatEventsCore.LeaveCombatReason;
+import net.milkbowl.combatevents.CombatReason;
+import net.milkbowl.combatevents.LeaveCombatReason;
 import net.milkbowl.combatevents.listeners.CombatEventsListener;
 import net.milkbowl.combatevents.events.EntityKilledByEntityEvent;
 import net.milkbowl.combatevents.events.PlayerLeaveCombatEvent;
