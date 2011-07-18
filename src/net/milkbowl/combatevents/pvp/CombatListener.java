@@ -14,7 +14,6 @@ import net.milkbowl.combatevents.LeaveCombatReason;
 import net.milkbowl.combatevents.listeners.CombatEventsListener;
 import net.milkbowl.combatevents.events.EntityKilledByEntityEvent;
 import net.milkbowl.combatevents.events.PlayerLeaveCombatEvent;
-import net.milkbowl.vault.economy.EconomyResponse;
 
 public class CombatListener extends CombatEventsListener {
 
@@ -27,7 +26,7 @@ public class CombatListener extends CombatEventsListener {
 
 	public void onPlayerLeaveCombat(PlayerLeaveCombatEvent event) {
 
-		if ( (event.getReason().equals(LeaveCombatReason.QUIT) || event.getReason().equals(LeaveCombatReason.KICK)) && Config.isPunish()) {
+		if (Config.isPunish() && (event.getReason().equals(LeaveCombatReason.QUIT) || event.getReason().equals(LeaveCombatReason.KICK)) ) {
 			for (CombatReason reason : event.getCombatReasons())
 				if (reason.equals(CombatReason.DAMAGED_BY_PLAYER) || reason.equals(CombatReason.ATTACKED_PLAYER)) {
 					Location dropLoc = ceCore.getCombatPlayer(event.getPlayer()).getLastLocation();
@@ -64,14 +63,14 @@ public class CombatListener extends CombatEventsListener {
 						player.sendMessage(ChatColor.YELLOW + formatMessage(message, new String[] {"%ATTACKER%", "%KILLED%"}, new String[] {attacker.getName(), killed.getName()}));
 					}
 			}
-			EconomyResponse killedBalance = CombatEventsPvP.econ.getBalance(killed.getName());
+			double killedBalance = CombatEventsPvP.econ.getBalance(killed.getName());
 			double reward = Config.getReward();
 			if (Config.getRewardType().equals("flat")) {
 				//check to make sure player has enough money to pay out the player
-				if (killedBalance.balance < reward)
-					reward = killedBalance.balance;
+				if (killedBalance < reward)
+					reward = killedBalance;
 			} else if (Config.getRewardType().equals("percent")) {
-				reward = (reward / 100) * killedBalance.amount;
+				reward = (reward / 100) * killedBalance;
 			}
 			CombatEventsPvP.econ.withdrawPlayer(killed.getName(), reward);
 			CombatEventsPvP.econ.depositPlayer(attacker.getName(), reward);
