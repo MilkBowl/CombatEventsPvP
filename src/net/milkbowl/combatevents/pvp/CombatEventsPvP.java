@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import net.milkbowl.combatevents.CombatEventsCore;
+import net.milkbowl.factionsex.FactionsEX;
 import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -23,6 +24,7 @@ public class CombatEventsPvP extends JavaPlugin {
 	private CombatEventsCore ceCore = null;
 	public static Permission perms = null;
 	public static Economy econ = null;
+	public static FactionsEX factions;
 
 	@Override
 	public void onLoad() {
@@ -44,6 +46,9 @@ public class CombatEventsPvP extends JavaPlugin {
 			this.getServer().getPluginManager().disablePlugin(this);
 			return;
 		}
+		setupOptionals();
+			
+		
 		punishSet = new HashSet<String>();
 		//Initialize our configuration options
 		Config.initialize(this);
@@ -56,9 +61,19 @@ public class CombatEventsPvP extends JavaPlugin {
 		pm.registerEvent(Event.Type.PLAYER_LOGIN, playerListener, Priority.Monitor, this);
 		log.info(plugName + " - v" + this.getDescription().getVersion() + " enabled!");
 	}
+	
+	private void setupOptionals() {
+		if (CombatEventsPvP.factions == null) {
+			Plugin factions = this.getServer().getPluginManager().getPlugin("FactionsEx");
+			if (factions != null) {
+				CombatEventsPvP.factions = (FactionsEX) factions;
+				log.info(plugName + " hooked into " + factions.getDescription().getName() + " v" + factions.getDescription().getVersion());
+			}
+		}
+	}
 
 	private boolean setupDependencies() {
-		if (ceCore == null) {
+		if (this.ceCore == null) {
 			Plugin ceCore = this.getServer().getPluginManager().getPlugin("CombatEventsCore");
 			if (ceCore != null) {
 				this.ceCore = ((CombatEventsCore) ceCore);

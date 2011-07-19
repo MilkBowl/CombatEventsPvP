@@ -14,6 +14,7 @@ import net.milkbowl.combatevents.LeaveCombatReason;
 import net.milkbowl.combatevents.listeners.CombatEventsListener;
 import net.milkbowl.combatevents.events.EntityKilledByEntityEvent;
 import net.milkbowl.combatevents.events.PlayerLeaveCombatEvent;
+import net.milkbowl.factionsex.FPlayer;
 
 public class CombatListener extends CombatEventsListener {
 
@@ -31,7 +32,7 @@ public class CombatListener extends CombatEventsListener {
 				if (reason.equals(CombatReason.DAMAGED_BY_PLAYER) || reason.equals(CombatReason.ATTACKED_PLAYER)) {
 					Location dropLoc = ceCore.getCombatPlayer(event.getPlayer()).getLastLocation();
 					ItemStack[] drops = ceCore.getCombatPlayer(event.getPlayer()).getInventory();
-					
+
 					for (int i = 0; i < drops.length; i++)
 						dropLoc.getWorld().dropItemNaturally(dropLoc, drops[i]);
 
@@ -42,7 +43,7 @@ public class CombatListener extends CombatEventsListener {
 				}
 		}
 	}
-	
+
 	@Override
 	public void onEntityKilledByEntity(EntityKilledByEntityEvent event) {
 		if (event.getAttacker() instanceof Player && event.getKilled() instanceof Player) {
@@ -65,6 +66,11 @@ public class CombatListener extends CombatEventsListener {
 			}
 			double killedBalance = CombatEventsPvP.econ.getBalance(killed.getName());
 			double reward = Config.getReward();
+			if (CombatEventsPvP.factions != null) 
+				if( FPlayer.get(attacker).getRelation(FPlayer.get(killed)).value > 2 )
+					reward = 0;
+	
+			
 			if (Config.getRewardType().equals("flat")) {
 				//check to make sure player has enough money to pay out the player
 				if (killedBalance < reward)
