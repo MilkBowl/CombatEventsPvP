@@ -1,12 +1,12 @@
 package net.milkbowl.combatevents.pvp;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import net.milkbowl.combatevents.CombatEventsCore;
 import net.milkbowl.factionsex.FactionsEX;
-import net.milkbowl.vault.Vault;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -14,6 +14,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class CombatEventsPvP extends JavaPlugin {
@@ -79,13 +80,22 @@ public class CombatEventsPvP extends JavaPlugin {
 				this.ceCore = ((CombatEventsCore) ceCore);
 			}
 		} 
-		if (CombatEventsPvP.econ == null || CombatEventsPvP.perms == null) {
-			Plugin VAULT = this.getServer().getPluginManager().getPlugin("Vault");
-			if (VAULT != null) {
-				CombatEventsPvP.econ = Vault.getEconomy();
-				CombatEventsPvP.perms = Vault.getPermission();
-			}
-		}
+        Collection<RegisteredServiceProvider<Economy>> econs = this.getServer().getServicesManager().getRegistrations(net.milkbowl.vault.economy.Economy.class);
+        for(RegisteredServiceProvider<Economy> econ : econs) {
+            Economy e = econ.getProvider();
+            log.info(String.format("[%s] Found Service (Economy) %s", getDescription().getName(), e.getName()));
+        }
+        Collection<RegisteredServiceProvider<Permission>> perms = this.getServer().getServicesManager().getRegistrations(net.milkbowl.vault.permission.Permission.class);
+        for(RegisteredServiceProvider<Permission> perm : perms) {
+            Permission p = perm.getProvider();
+            log.info(String.format("[%s] Found Service (Permission) %s", getDescription().getName(), p.getName()));
+        }
+        
+        CombatEventsPvP.econ = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class).getProvider();
+        log.info(String.format("[%s] Using Economy Provider %s", getDescription().getName(), econ.getName()));
+        CombatEventsPvP.perms = this.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class).getProvider();
+        log.info(String.format("[%s] Using Permission Provider %s", getDescription().getName(), CombatEventsPvP.perms.getName()));
+        
 		if (CombatEventsPvP.perms == null || CombatEventsPvP.econ == null || ceCore == null)
 			return false;
 		else
