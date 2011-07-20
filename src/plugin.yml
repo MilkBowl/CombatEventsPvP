@@ -1,6 +1,6 @@
 name: CombatEventsPvP
 main: net.milkbowl.combatevents.pvp.CombatEventsPvP
-version: 1.0
+version: 1.0-b000
 author: Sleaker
 depend: [Vault, CombatEventsCore]
 description: >
