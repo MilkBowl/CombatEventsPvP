@@ -89,7 +89,7 @@ public class CombatListener extends CombatEventsListener {
 
 	private String formatMessage(String message, String[] replaceText, String[] replacers) {
 		for (int i = 0; i < replaceText.length; i++) {
-			message.replace(replaceText[i], replacers[i]);
+			message = message.replace(replaceText[i], replacers[i]);
 		}
 		return message;
 	}
