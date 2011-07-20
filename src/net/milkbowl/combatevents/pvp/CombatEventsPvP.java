@@ -25,7 +25,7 @@ public class CombatEventsPvP extends JavaPlugin {
 	private CombatEventsCore ceCore = null;
 	public static Permission perms = null;
 	public static Economy econ = null;
-	public static FactionsEX factions;
+	public static FactionsEx factions;
 
 	@Override
 	public void onLoad() {
