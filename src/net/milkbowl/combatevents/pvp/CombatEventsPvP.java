@@ -6,7 +6,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import net.milkbowl.combatevents.CombatEventsCore;
-import net.milkbowl.factionsex.FactionsEX;
+import net.milkbowl.factionsex.FactionsEx;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 
@@ -67,7 +67,7 @@ public class CombatEventsPvP extends JavaPlugin {
 		if (CombatEventsPvP.factions == null) {
 			Plugin factions = this.getServer().getPluginManager().getPlugin("FactionsEx");
 			if (factions != null) {
-				CombatEventsPvP.factions = (FactionsEX) factions;
+				CombatEventsPvP.factions = (FactionsEx) factions;
 				log.info(plugName + " hooked into " + factions.getDescription().getName() + " v" + factions.getDescription().getVersion());
 			}
 		}
