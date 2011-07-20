@@ -46,7 +46,7 @@
   
   <target name="compress" description="Compression target">
   		<echo>Compressing</echo>
-        <jar jarfile="CombatEventsBounty.jar" basedir="bin" includes="net/**/*, plugin.yml, props/*">
+        <jar jarfile="CombatEventsPvP.jar" basedir="bin" includes="net/**/*, plugin.yml, props/*">
 		<manifest>
 			<attribute name="Built-By" value="${user.name}" />
 		</manifest>
