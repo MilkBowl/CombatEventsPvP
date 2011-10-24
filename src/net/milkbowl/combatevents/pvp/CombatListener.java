@@ -32,8 +32,11 @@ public class CombatListener extends CombatEventsListener {
 					Location dropLoc = ceCore.getCombatPlayer(event.getPlayer()).getLastLocation();
 					ItemStack[] drops = ceCore.getCombatPlayer(event.getPlayer()).getInventory();
 
-					for (int i = 0; i < drops.length; i++)
+					for (int i = 0; i < drops.length; i++) {
+						if (drops[i] == null)
+							continue;
 						dropLoc.getWorld().dropItemNaturally(dropLoc, drops[i]);
+					}
 
 					event.getPlayer().damage(1000);
 					event.getPlayer().getInventory().clear();
