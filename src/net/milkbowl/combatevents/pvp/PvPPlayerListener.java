@@ -17,7 +17,6 @@ public class PvPPlayerListener extends PlayerListener{
 			plugin.punishSet.remove(player.getName());
 			player.sendMessage("You have been killed while attempting to flee combat and your items have been looted!");
 			Config.saveConfig(plugin);
-		}
-			
+		}	
 	}
 }

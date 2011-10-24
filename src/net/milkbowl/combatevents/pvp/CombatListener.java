@@ -63,22 +63,24 @@ public class CombatListener extends CombatEventsListener {
 						player.sendMessage(ChatColor.YELLOW + formatMessage(message, new String[] {"%ATTACKER%", "%KILLED%"}, new String[] {attacker.getName(), killed.getName()}));
 					}
 			}
-			double killedBalance = CombatEventsPvP.econ.getBalance(killed.getName());
+			
 			double reward = Config.getReward();
-		
-			if (Config.getRewardType().equals("flat")) {
-				//check to make sure player has enough money to pay out the player
-				if (killedBalance < reward)
-					reward = killedBalance;
-			} else if (Config.getRewardType().equals("percent")) {
-				reward = (reward / 100) * killedBalance;
-			}
-			CombatEventsPvP.econ.withdrawPlayer(killed.getName(), reward);
-			CombatEventsPvP.econ.depositPlayer(attacker.getName(), reward);
-			//Send our messages
-			attacker.sendMessage(formatMessage(Config.getKillerMessage(), new String[] {"%PLAYER%", "%REWARD%"}, new String[] {killed.getName(), CombatEventsPvP.econ.format(reward)}));
-			killed.sendMessage(formatMessage(Config.getDeathMessage(), new String[] {"%PLAYER%", "%REWARD%"}, new String[] {attacker.getName(), CombatEventsPvP.econ.format(reward)}));
+			if (reward > 0) {
+				double killedBalance = CombatEventsPvP.econ.getBalance(killed.getName());
+				if (Config.getRewardType().equals("flat")) {
+					//check to make sure player has enough money to pay out the player
+					if (killedBalance < reward)
+						reward = killedBalance;
+				} else if (Config.getRewardType().equals("percent")) {
+					reward = (reward / 100) * killedBalance;
+				}
 
+				CombatEventsPvP.econ.withdrawPlayer(killed.getName(), reward);
+				CombatEventsPvP.econ.depositPlayer(attacker.getName(), reward);
+				//Send our messages
+				attacker.sendMessage(formatMessage(Config.getKillerMessage(), new String[] {"%PLAYER%", "%REWARD%"}, new String[] {killed.getName(), CombatEventsPvP.econ.format(reward)}));
+				killed.sendMessage(formatMessage(Config.getDeathMessage(), new String[] {"%PLAYER%", "%REWARD%"}, new String[] {attacker.getName(), CombatEventsPvP.econ.format(reward)}));
+			}
 		}
 	}
 
