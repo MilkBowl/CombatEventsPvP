@@ -14,7 +14,6 @@ import net.milkbowl.combatevents.LeaveCombatReason;
 import net.milkbowl.combatevents.listeners.CombatEventsListener;
 import net.milkbowl.combatevents.events.EntityKilledByEntityEvent;
 import net.milkbowl.combatevents.events.PlayerLeaveCombatEvent;
-import net.milkbowl.factionsex.FPlayer;
 
 public class CombatListener extends CombatEventsListener {
 
@@ -66,11 +65,7 @@ public class CombatListener extends CombatEventsListener {
 			}
 			double killedBalance = CombatEventsPvP.econ.getBalance(killed.getName());
 			double reward = Config.getReward();
-			if (CombatEventsPvP.factions != null) 
-				if( FPlayer.get(attacker).getRelation(FPlayer.get(killed)).value > 2 )
-					reward = 0;
-	
-			
+		
 			if (Config.getRewardType().equals("flat")) {
 				//check to make sure player has enough money to pay out the player
 				if (killedBalance < reward)
