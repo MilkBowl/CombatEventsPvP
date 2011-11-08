@@ -25,7 +25,9 @@ public class CombatListener extends CombatEventsListener {
 	}
 
 	public void onPlayerLeaveCombat(PlayerLeaveCombatEvent event) {
-
+		if (event.getPlayer().isDead() || event.getPlayer().getHealth() == 0 || event.isCancelled())
+			return;
+		
 		if (Config.isPunish() && (event.getReason().equals(LeaveCombatReason.QUIT) || event.getReason().equals(LeaveCombatReason.KICK)) ) {
 			for (CombatReason reason : event.getCombatReasons())
 				if (reason.equals(CombatReason.DAMAGED_BY_PLAYER) || reason.equals(CombatReason.ATTACKED_PLAYER)) {
