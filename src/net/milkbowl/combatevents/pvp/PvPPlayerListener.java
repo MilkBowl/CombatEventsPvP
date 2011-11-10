@@ -14,6 +14,8 @@ public class PvPPlayerListener extends PlayerListener{
 	public void onPlayerLogin(PlayerLoginEvent event) {
 		Player player = event.getPlayer();
 		if (plugin.punishSet.contains(player.getName())) {
+			player.getInventory().clear();
+			player.updateInventory();
 			plugin.punishSet.remove(player.getName());
 			player.sendMessage("You have been killed while attempting to flee combat and your items have been looted!");
 			Config.saveConfig(plugin);
